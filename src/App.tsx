@@ -3,11 +3,13 @@ import { useQuery } from 'react-query';
 import Drawer from '@material-ui/core/Drawer';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
-import { AddShoppingCart } from '@material-ui/icons';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import  Badge from '@material-ui/core/Badge';
 import { Wrapper, StyledButton } from './App.styles';
 import './App.css';
 import Item from './Item/Item';
+import Cart from './Cart/Cart';
+import { createGlobalStyle } from 'styled-components';
 
 export type CartItemType = {
   id: number;
@@ -16,7 +18,7 @@ export type CartItemType = {
   image: string;
   price: number;
   title: string;
-  amoun: number;
+  amount: number;
 }
 
 const getProducts = async (): Promise <CartItemType[]> => 
@@ -27,7 +29,10 @@ function App() {
   const [cartItems, setCartItems] = useState([] as CartItemType[])
 const { data, isLoading, error } = useQuery<CartItemType[]>('products', getProducts);
 
-const getTotalItems = () => null;
+
+
+const getTotalItems = (items: CartItemType[]) => 
+ items.reduce((ack: number, item ) => ack + item.amount, 0);
 
 const handleAddToCart = (clickedItem: CartItemType) => null;
 
@@ -39,11 +44,17 @@ if (error) return <div>Something went wrong ...</div>
   return (
 <Wrapper>
   <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
-    Cart goes here
+    <Cart 
+    cartItem = {cartItems} 
+    addToCart = {handleAddToCart} 
+    removeFromCart = {handleRemoveFromCart}
+    />
   </Drawer>
 
   <StyledButton onClick = {() => setCartOpen(true)}>
-    
+    <Badge badgeContent={getTotalItems(cartItems)} color="error">
+      <AddShoppingCartIcon />
+    </Badge>
   </StyledButton>
 
    <Grid container spacing={3}>
