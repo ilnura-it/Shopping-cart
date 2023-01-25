@@ -1,4 +1,4 @@
-import CartItem from "../CartItem/CartItem";
+import CartItem from '../CartItem/CartItem';
 import { CartItemType } from '../App';
 import { Wrapper } from './Cart.styles';
 import React from "react";
@@ -21,7 +21,6 @@ const Cart: React.FC<Props> = ({ cartItem, addToCart, removeFromCart }) => {
          addToCart={addToCart}
          removeFromCart={removeFromCart}/>
       ))}
-
    </Wrapper>
  )
 }
